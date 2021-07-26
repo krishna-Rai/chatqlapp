@@ -40,8 +40,8 @@ async function startServer() {
     { schema, execute, subscribe,
       onConnect: (connectionParams, webSocket) => {
         console.log(connectionParams)
-        if (connectionParams.authToken) {
-          const token = connectionParams.authToken
+        if (connectionParams.Authorization) {
+          const token = connectionParams.Authorization.split('Bearer ')[1]
           console.log(token)
           const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
           const user = decodedToken

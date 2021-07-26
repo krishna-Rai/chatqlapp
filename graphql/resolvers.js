@@ -78,7 +78,7 @@ module.exports = {
         throw err
       }
     },
-    getGroups: async(_,__,context) => {
+    getGroups: async(_,args,context) => {
       try {
         if (context.req && context.req.headers.authorization) {
           const token = context.req.headers.authorization.split('Bearer ')[1]
@@ -86,8 +86,14 @@ module.exports = {
           const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
           const user = decodedToken
           console.log(user)
-
-          let groups = await Member.find({user_id:user.id}).populate("group_id").select("group_id -_id")
+          const pageOptions = {
+            page: parseInt(args.page, 10) || 0,
+            limit: parseInt(args.limit, 10) || 10
+          }
+          let groups = await Member.find({user_id:user.id})
+          .skip(pageOptions.page * pageOptions.limit)
+          .limit(pageOptions.limit)
+          .populate("group_id").select("group_id -_id")
           groups = groups.map((group)=>{
             return group.group_id
           })

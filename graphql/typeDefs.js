@@ -22,7 +22,7 @@ module.exports = gql`
   type Query {
     getUsers: [User]!
     login(email:String!,password:String!):User!
-    getGroups: [Group]!
+    getGroups(page:Int, limit:Int): [Group]!
   }
   
   type Mutation {
