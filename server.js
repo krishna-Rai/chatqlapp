@@ -30,6 +30,8 @@ async function startServer() {
   const server = new ApolloServer({
     schema,
     context: (ctx) => ctx,
+    introspection: true,
+    playground: true
   });
   await server.start();
   server.applyMiddleware({ app });
